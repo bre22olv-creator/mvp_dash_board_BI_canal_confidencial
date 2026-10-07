@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="img/iconeAttDash.png" type="image/x-icon">
+  <title>Monitoramento do Canal Confidencial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">C</span><div><strong>Canal Confidencial</strong><small>Monitoramento</small></div></div>
+      <nav>
+        <button class="nav-item active"><span>▦</span> Visão geral</button>
+        <a class="nav-item" href="#detalhamento"><span>≡</span> Detalhamento</a>
+      </nav>
+      <div class="rule-card">
+        <strong>Regra do farol</strong>
+        <p><i class="dot green"></i> Menos de 5 dias</p>
+        <p><i class="dot red"></i> 5 dias ou mais</p>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div><p class="eyebrow">PAINEL EXECUTIVO</p><h1>Monitoramento de respostas</h1><p class="subtitle">Indicadores gerados a partir da planilha importada</p></div>
+        <label class="upload-btn" for="excelFile"><span>＋</span> Importar planilha</label>
+        <input type="file" id="excelFile" accept=".xlsx,.xls" hidden>
+      </header>
+
+      <section class="info-strip">
+        <span id="fileName">Nenhuma planilha importada</span>
+        <span id="lastUpdate">Última atualização: --</span>
+        <button id="clearData" class="text-btn">Limpar dados</button>
+      </section>
+      <div id="message" class="message" role="status"></div>
+
+      <section class="filters">
+        <label>Regional<select id="regionalFilter"><option value="">Todas</option></select></label>
+        <label>Gestor responsável<select id="gestorFilter"><option value="">Todos</option></select></label>
+        <label>Status<select id="statusFilter"><option value="">Todos</option></select></label>
+        <button id="resetFilters" class="secondary-btn">Limpar filtros</button>
+      </section>
+
+      <section class="kpi-grid">
+        <article class="kpi neutral"><div class="icon">◆</div><div><span>Total de denúncias</span><strong id="total">0</strong><small>Registros carregados</small></div></article>
+        <article class="kpi success"><div class="icon">●</div><div><span>Dentro do prazo</span><strong id="dentroPrazo">0</strong><small id="dentroPercent">0% do total</small></div></article>
+        <article class="kpi danger"><div class="icon">●</div><div><span>Fora do prazo</span><strong id="foraPrazo">0</strong><small id="foraPercent">0% do total</small></div></article>
+        <article class="kpi info"><div class="icon">✓</div><div><span>Respondidas</span><strong id="respondidas">0</strong><small id="respondidasPercent">0% do total</small></div></article>
+      </section>
+
+      <section class="charts-grid">
+        <article class="panel farol-panel">
+          <div class="panel-head"><div><span class="label">FAROL DO PRAZO</span><h2>Situação geral</h2></div><span class="badge" id="farolBadge">Sem dados</span></div>
+          <div class="chart-wrap"><canvas id="farolChart"></canvas><div class="chart-center"><strong id="farolPercent">0%</strong><span>dentro do prazo</span></div></div>
+          <div class="legend-row"><span><i class="dot green"></i> Dentro do prazo</span><span><i class="dot red"></i> Fora do prazo</span></div>
+        </article>
+        <article class="panel">
+          <div class="panel-head"><div><span class="label">DISTRIBUIÇÃO</span><h2>Detalhamento dos quatro status</h2></div></div>
+          <div class="canvas-box"><canvas id="statusChart"></canvas></div>
+        </article>
+        <article class="panel wide">
+          <div class="panel-head"><div><span class="label">REGIONAIS</span><h2>Volume de denúncias por regional</h2></div></div>
+          <div class="canvas-box canvas-wide"><canvas id="regionalChart"></canvas></div>
+        </article>
+        <article class="panel">
+          <div class="panel-head"><div><span class="label">RESPOSTAS</span><h2>Respondidas x aguardando resposta</h2></div></div>
+          <div class="canvas-box"><canvas id="responseChart"></canvas></div>
+        </article>
+      </section>
+
+      <section class="panel table-panel" id="detalhamento">
+        <div class="panel-head"><div><span class="label">DETALHAMENTO</span><h2>Registros importados</h2></div><span id="recordCount" class="record-count">0 registros</span></div>
+        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Título da denúncia</th><th>Abertura</th><th>Resposta</th><th>Regional</th><th>Gestor responsável</th><th>Status</th></tr></thead><tbody id="dataBody"><tr><td colspan="7" class="empty">Importe uma planilha para visualizar os dados.</td></tr></tbody></table></div>
+      </section>
+    </main>
+  </div>
+  <script src="js/app.js"></script>
+</body>
+</html>
